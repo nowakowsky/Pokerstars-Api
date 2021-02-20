@@ -1,0 +1,4 @@
+#exclude my venv, generated images and cache
+/pokerstars/*
+/app/*.png
+/app/__pycache__/*
