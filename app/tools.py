@@ -14,7 +14,52 @@ except:
     from app import settings
     from app import models
 
+def readTableCards(filename: str) -> list:
+    cards = []
 
+    # y position for cards on table don't change
+    cards_y1, cards_y2 = 174, 190
+
+    # x changes by 39 px right
+    cards_diff = 39
+    
+    # hardcoded card 1 x position
+    table_cards = [226, 237]
+
+    # hardcoded floop, turn and river positions
+    for i in range(1,5):
+        table_cards.append(table_cards[0] + cards_diff * i)
+        table_cards.append(table_cards[1] + cards_diff * i)
+
+    image = cv2.imread(filename)
+    # image = cv2.imread("233725_427272.png")
+
+    
+    for i in range(0,10,2):
+        #test przesunięcie 4 karty w lewo o kilka px
+        if i == 6 or i == 4:
+            card = image[cards_y1:cards_y2, table_cards[i]-2:table_cards[i+1]]
+        elif i == 8:
+            card = image[cards_y1:cards_y2, table_cards[i]-2:table_cards[i+1]-3]
+        else:
+            card = image[cards_y1:cards_y2, table_cards[i]:table_cards[i+1]]
+
+        # if cart not on table yet
+        if emptyCard(card):
+            pass
+        else:
+            cards.append(cardInfo(card))
+
+    return cards
+
+
+def emptyCard(img):
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    orange_lower = np.array([10, 100, 20], np.uint8) 
+    orange_upper = np.array([25, 255, 255], np.uint8)
+    orange_mask = cv2.inRange(img, orange_lower, orange_upper) 
+    if len(np.argwhere(orange_mask)) > 100:
+        return True
 
 pytesseract.pytesseract.tesseract_cmd = settings.tesseract_path
 
@@ -97,7 +142,7 @@ def cardInfo(image) -> models.Card:
     Calls __getCardValue and __getCardColor and returns Card object
     """
     card = models.Card(__getCardValue(cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)),
-        __getColor(image))
+        __getCardColor(image))
 
     return card
 
@@ -121,11 +166,14 @@ def __getCardValue(image) -> str:
         elif '10' in card:
             return card[:2]
     except:
-        card = pytesseract.image_to_string(image, config=settings.config_single_word).replace("\f", "").replace("\n", "").replace("\r", "").replace(" ", "")
-        if card in '23456789JQKA':
-            return card[0]
-        elif '10' in card:
-            return card[:2]
+        try:
+            card = pytesseract.image_to_string(image, config=settings.config_single_word).replace("\f", "").replace("\n", "").replace("\r", "").replace(" ", "")
+            if card in '23456789JQKA':
+                return card[0]
+            elif '10' in card:
+                return card[:2]
+        except:
+            return "?"
     return "X"
 
 def __getCardColor(image) -> models.Colors:
@@ -154,21 +202,21 @@ def __checkRed(img):
     red_lower = np.array([136, 87, 111], np.uint8) 
     red_upper = np.array([180, 255, 255], np.uint8) 
     red_mask = cv2.inRange(img, red_lower, red_upper) 
-    if len(np.argwhere(red_mask)) > 50:
+    if len(np.argwhere(red_mask)) > 30:
         return True
         
 def __checkGreen(img):  
     green_lower = np.array([25, 52, 72], np.uint8) 
     green_upper = np.array([102, 255, 255], np.uint8) 
     green_mask = cv2.inRange(img, green_lower, green_upper) 
-    if len(np.argwhere(green_mask)) > 50:
+    if len(np.argwhere(green_mask)) > 30:
         return True
 
 def __checkBlue(img):
     blue_lower = np.array([94, 80, 2], np.uint8) 
     blue_upper = np.array([120, 255, 255], np.uint8) 
     blue_mask = cv2.inRange(img, blue_lower, blue_upper)
-    if len(np.argwhere(blue_mask)) > 50:
+    if len(np.argwhere(blue_mask)) > 30:
         return True
 
 #more tests to black mask are requied
@@ -176,5 +224,6 @@ def __checkBlack(img):
     black_lower = np.array([0, 0, 0], np.uint8) 
     black_upper = np.array([50, 50, 50], np.uint8) 
     black_mask = cv2.inRange(img, black_lower, black_upper) 
-    if len(np.argwhere(black_mask)) > 50:
+    if len(np.argwhere(black_mask)) > 20:
         return True
+
