@@ -20,7 +20,7 @@ class PokerBot:
         else:
             return "Floop"
 
-    def readData(self):
+    def readData(self, screenshot):
         self.tableCards = tools.readTableCards(screenshot.filename)
         self.playerCards = tools.readPlayerCards(screenshot.filename)
         self.gameState = self.checkGameState()
@@ -49,47 +49,39 @@ class ChangesHandler:
         print (f'Table: {self.tableName}')
         print ("########################")
 
-import time
-
-if __name__ == "__main__":
+class MultiBot:
+    # this will be changed soon
     handlers = []
     bots = []
-    gameWindows = tools.moveAndResizeWindows()
-    while 1:
-        screenshots = tools.grabScreen(gameWindows)
+    gameWindows = []
+    def __init__(self):
+        self.gameWindows = tools.moveAndResizeWindows()
+        screenshots = tools.grabScreen(self.gameWindows)
         activeTables = [x.tableName for x in screenshots]
-        
-        # first run
-        if handlers == []:
-            for table in activeTables:
-                # init bot
-                bot = PokerBot()
-                bot.tableName = table
-                
-                # init handler
-                changesHandler = ChangesHandler(bot)
-                
-                # create lists
-                handlers.append(changesHandler)
-                bots.append(bot)
 
-        for screenshot in screenshots:
-            bot = next(filter(lambda b: b.tableName == screenshot.tableName, bots))
-            handler = next(filter(lambda h: h.tableName == screenshot.tableName, handlers))
+        for table in activeTables:
+            # init bot
+            bot = PokerBot()
+            bot.tableName = table
+            
+            # init handler
+            changesHandler = ChangesHandler(bot)
+            
+            # list bots and handlers
+            self.handlers.append(changesHandler)
+            self.bots.append(bot)
 
-            bot.readData()
-            handler.check(bot)
+    def run(self):
+        while 1:
+            # this can help if user moves window, not sure if needed
+            #gameWindows = tools.moveAndResizeWindows()
 
-    # for screenshot in screenshots:
-    #     changesHandler = ChangesHandler(self)
-    #     self.tableCards = tools.readTableCards(screenshot.filename)
-    #     self.playerCards = tools.readPlayerCards(screenshot.filename)
-    #     self.gameState = self.checkGameState()
-    #     changesHandler.check(self)
-    #     del changesHandler
+            screenshots = tools.grabScreen(self.gameWindows)
+            activeTables = [x.tableName for x in screenshots]
+            
+            for screenshot in screenshots:
+                bot = next(filter(lambda b: b.tableName == screenshot.tableName, self.bots))
+                handler = next(filter(lambda h: h.tableName == screenshot.tableName, self.handlers))
 
-
-    #     bot = PokerBot()
-    #     bot.readData()
-    #     print ("###")
-    #     time.sleep(2)
+                bot.readData(screenshot)
+                handler.check(bot)
