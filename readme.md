@@ -1,7 +1,7 @@
 # This app reads data from PokerStars game.
 ### It can work on any number of tables simultaneously
 
-PokerStars windows don't have to be even visible, but **cannot be minimalized**.
+PokerStars windows don't even have to be visible, but **cannot be minimalized**.
 
 
 At the moment this app recons:
