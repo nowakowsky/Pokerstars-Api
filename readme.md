@@ -9,7 +9,7 @@ At the moment this app recons:
 * Player cards
 * Game stage
 
-** To make it work you need to set up orange table and default deck with 4 colors! **
+**To make it work you need to set up orange table and default deck with 4 colors!**
 
 Letter "X" and "?" signs means that card wasn't recognized properly.
 
