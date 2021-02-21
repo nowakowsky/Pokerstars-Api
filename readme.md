@@ -9,7 +9,7 @@ At the moment this app recons:
 * Player cards
 * Game stage
 
-To make it work you need to set up orange table and default deck with 4 colors!
+** To make it work you need to set up orange table and default deck with 4 colors! **
 
 Letter "X" and "?" signs means that card wasn't recognized properly.
 
@@ -33,7 +33,8 @@ Table: Aitne VI
 ########################
 ```
 ## This is just a side project to learn some programming basics written in few hours, do not expect too much. Anyway it is working pretty good
-
+### This is not completed app, treat it as a beta version 
+ 
 ### It uses tesseract, opencv, pywin32, numpy and Pillow
 [Get tesseract installer](https://github.com/UB-Mannheim/tesseract/wiki)
 I was using tesseract-ocr-w64-setup-v5.0.0-alpha.20201127
