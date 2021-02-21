@@ -11,10 +11,10 @@ At the moment this app recons:
 
 # How to
 **To make it work you need to set up orange table and default deck with 4 colors!**
+* install requirements.txt
 * enter Pokerstars rooms (any number)
 * run powershell as admin
 * python main.py
-
 
 Letter "X" and "?" signs means that card wasn't recognized properly.
 
@@ -42,10 +42,14 @@ Each table has separate output and it's being send to stdout on change on this t
 ## This is just a side project to learn some programming basics written in few hours, do not expect too much. Anyway it is working pretty good
 ### This is not completed app, treat it as a beta version 
  
-### It uses tesseract, opencv, pywin32, numpy and Pillow
-[Get tesseract installer](https://github.com/UB-Mannheim/tesseract/wiki)
-I was using tesseract-ocr-w64-setup-v5.0.0-alpha.20201127
 
-[Above url is listed on official tesseract readme](https://github.com/tesseract-ocr/tesseract)
+# Links
 
-[Tesseract wrapper docs](https://pypi.org/project/pytesseract/)
+### This app uses:
+* [Tesseract](https://github.com/tesseract-ocr/tesseract)
+* [Tesseract wrapper](https://pypi.org/project/pytesseract/)
+* [Tesseract binaries](https://github.com/UB-Mannheim/tesseract/wiki) - I was using tesseract-ocr-w64-setup-v5.0.0-alpha.20201127
+* [OpenCV](https://github.com/opencv/opencv-python)
+* [pywin32](https://github.com/mhammond/pywin32)
+* [Pillow](https://pillow.readthedocs.io/en/stable/)
+* [numpy](https://numpy.org/)
