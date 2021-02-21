@@ -1,5 +1,5 @@
-from app import tools
-from app import models
+import tools
+import models
 import os
 import cv2
 import threading

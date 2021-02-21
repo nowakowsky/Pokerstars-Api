@@ -7,8 +7,8 @@ import os
 import win32gui
 import win32ui
 from ctypes import windll
-from app import settings
-from app import models
+import settings
+import models
 
 
 
