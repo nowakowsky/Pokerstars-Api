@@ -1,5 +1,5 @@
 # This app reads data from PokerStars game.
-## It can work on any number of tables simultaneously
+### It can work on any number of tables simultaneously
 
 PokerStars windows don't have to be even visible, but **cannot be minimalized**.
 
@@ -14,6 +14,7 @@ To make it work you need to set up orange table and default deck with 4 colors!
 Letter "X" and "?" signs means that card wasn't recognized properly.
 
 # Example output
+```
 ########################
 Player cards [T9, C6]
 Cards on table: [TA, H6, H4, CJ, C5]
@@ -30,11 +31,8 @@ Cards on table: [HQ, P8, C2]
 Game state: Floop
 Table: Aitne VI
 ########################
-
-## This is just a side project to learn some programming basics written in few hours, do not expect too much
-### anyway it is working pretty good
-
-[GitHub](http://github.com)
+```
+## This is just a side project to learn some programming basics written in few hours, do not expect too much. Anyway it is working pretty good
 
 ### It uses tesseract, opencv, pywin32, numpy and Pillow
 [Get tesseract installer](https://github.com/UB-Mannheim/tesseract/wiki)
