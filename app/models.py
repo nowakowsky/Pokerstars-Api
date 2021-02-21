@@ -1,5 +1,6 @@
 import enum
 import os
+
 class Colors(enum.Enum):
     Hearts = "H"
     Tiles = "T"

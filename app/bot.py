@@ -1,6 +1,6 @@
-import tools
+from app import tools
+from app import models
 import os
-import models
 import cv2
 import threading
 
@@ -8,7 +8,7 @@ class PokerBot:
     gameState = ""
     playerCards = []
     tableCards = []
-    tableName = ""
+    # tableName = ""
 
     def checkGameState(self) -> str:
         if not len(self.tableCards):
@@ -28,11 +28,11 @@ class PokerBot:
 
 class ChangesHandler:
     tableName = ""
-    def __init__(self, bot: PokerBot):
+    def __init__(self, bot: PokerBot, tableName: str):
         self.gameState = bot.gameState
         self.playerCards = bot.playerCards
         self.tableCards = bot.tableCards
-        self.tableName = bot.tableName
+        self.tableName = tableName
     
     def check(self, bot: PokerBot):
         if self.gameState != bot.gameState or self.playerCards != bot.playerCards or self.tableCards != bot.tableCards:
@@ -50,38 +50,22 @@ class ChangesHandler:
         print ("########################")
 
 class MultiBot:
-    # this will be changed soon
-    handlers = []
-    bots = []
-    gameWindows = []
+    bot_dict = {}
     def __init__(self):
         self.gameWindows = tools.moveAndResizeWindows()
         screenshots = tools.grabScreen(self.gameWindows)
-        activeTables = [x.tableName for x in screenshots]
 
-        for table in activeTables:
-            # init bot
+        for img in screenshots:
             bot = PokerBot()
-            bot.tableName = table
-            
-            # init handler
-            changesHandler = ChangesHandler(bot)
-            
-            # list bots and handlers
-            self.handlers.append(changesHandler)
-            self.bots.append(bot)
+            img.tableName
 
+            changesHandler = ChangesHandler(bot, img.tableName)
+            self.bot_dict[img.tableName] = [bot, changesHandler]
+    
     def run(self):
         while 1:
-            # this can help if user moves window, not sure if needed
-            #gameWindows = tools.moveAndResizeWindows()
-
             screenshots = tools.grabScreen(self.gameWindows)
-            activeTables = [x.tableName for x in screenshots]
-            
-            for screenshot in screenshots:
-                bot = next(filter(lambda b: b.tableName == screenshot.tableName, self.bots))
-                handler = next(filter(lambda h: h.tableName == screenshot.tableName, self.handlers))
-
-                bot.readData(screenshot)
-                handler.check(bot)
+            for img in screenshots:
+                bot, changesHandler = self.bot_dict[img.tableName]
+                bot.readData(img)
+                changesHandler.check(bot)

@@ -7,8 +7,8 @@ import os
 import win32gui
 import win32ui
 from ctypes import windll
-import settings
-import models
+from app import settings
+from app import models
 
 
 
@@ -140,6 +140,7 @@ def grabScreen(windows: list) -> list:
 
 def moveAndResizeWindows() -> list:
     """
+    Moving windows is not really important. Only windows size matters
     this function prepares windows, it can be easly changed if anything will require visibility
     returns output of __searchHwnds (all found hwnds)
     """
