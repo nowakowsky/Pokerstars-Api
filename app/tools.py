@@ -7,12 +7,9 @@ import os
 import win32gui
 import win32ui
 from ctypes import windll
-try:
-    import settings
-    import models
-except:
-    from app import settings
-    from app import models
+import settings
+import models
+
 
 
 def readPlayerCards(filename: str) -> list:
@@ -55,11 +52,9 @@ def readTableCards(filename: str) -> list:
         table_cards.append(table_cards[1] + cards_diff * i)
 
     image = cv2.imread(filename)
-    # image = cv2.imread("233725_427272.png")
-
     
     for i in range(0,10,2):
-        #test przesunięcie 4 karty w lewo o kilka px
+        #that can be improved, card "10" has other coords
         if i == 6 or i == 4:
             card = image[cards_y1:cards_y2, table_cards[i]-2:table_cards[i+1]]
         elif i == 8:
@@ -68,15 +63,13 @@ def readTableCards(filename: str) -> list:
             card = image[cards_y1:cards_y2, table_cards[i]:table_cards[i+1]]
 
         # if card not on table yet
-        if emptyCard(card):
-            pass
-        else:
+        if not emptyCard(card):
             cards.append(cardInfo(card))
 
     return cards
 
 
-def emptyCard(img):
+def emptyCard(img) -> bool:
     img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     orange_lower = np.array([10, 100, 20], np.uint8) 
     orange_upper = np.array([25, 255, 255], np.uint8)
@@ -219,21 +212,21 @@ def __getCardColor(image) -> models.Colors:
         return models.Colors.Pikes
     return models.Colors.Error
 
-def __checkRed(img):
+def __checkRed(img) -> bool:
     red_lower = np.array([136, 87, 111], np.uint8) 
     red_upper = np.array([180, 255, 255], np.uint8) 
     red_mask = cv2.inRange(img, red_lower, red_upper) 
     if len(np.argwhere(red_mask)) > 30:
         return True
         
-def __checkGreen(img):  
+def __checkGreen(img) -> bool:  
     green_lower = np.array([25, 52, 72], np.uint8) 
     green_upper = np.array([102, 255, 255], np.uint8) 
     green_mask = cv2.inRange(img, green_lower, green_upper) 
     if len(np.argwhere(green_mask)) > 30:
         return True
 
-def __checkBlue(img):
+def __checkBlue(img) -> bool:
     blue_lower = np.array([94, 80, 2], np.uint8) 
     blue_upper = np.array([120, 255, 255], np.uint8) 
     blue_mask = cv2.inRange(img, blue_lower, blue_upper)
@@ -241,7 +234,7 @@ def __checkBlue(img):
         return True
 
 #more tests to black mask are requied
-def __checkBlack(img):
+def __checkBlack(img) -> bool:
     black_lower = np.array([0, 0, 0], np.uint8) 
     black_upper = np.array([50, 50, 50], np.uint8) 
     black_mask = cv2.inRange(img, black_lower, black_upper) 

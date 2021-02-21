@@ -1,11 +1,11 @@
 import enum
 import os
 class Colors(enum.Enum):
-    Hearts = "H"    # Kier (serce)
-    Tiles = "T"     # Karo (diamenty)
-    Clovers = "C"   # Trefl (żołędzie)
-    Pikes = "P"     # Pik (wino)
-    Error = "X"     # No color detecred
+    Hearts = "H"
+    Tiles = "T"
+    Clovers = "C"
+    Pikes = "P"
+    Error = "X"
 
 class Card:
     def __init__(self, value: str, color: Colors):
@@ -34,13 +34,6 @@ class Screenshot:
 
     def __del__(self):
         # __del__ is not a destructor in a classic way
-        # it is called when GC destroys an object
+        # it is called by GC when it destroys an object
         # so this is pretty nice way to remove screenshot from hdd
         os.remove(self.filename)
-
-        
-
-
-if __name__ == "__main__":
-    floop = Card("9", Colors.Hearts), Card("2", Colors.Pikes), Card("A", Colors.Clovers)
-    print (*floop)
