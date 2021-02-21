@@ -43,7 +43,7 @@ class ChangesHandler:
 
         
     def printData(self):
-        print (f'Player cards {self.playerCards}')
+        print (f'Player cards: {self.playerCards}')
         print (f'Cards on table: {self.tableCards}')
         print (f'Game state: {self.gameState}')
         print (f'Table: {self.tableName}')

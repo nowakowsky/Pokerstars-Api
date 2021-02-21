@@ -21,17 +21,17 @@ Letter "X" and "?" signs means that card wasn't recognized properly.
 # Example output
 ```
 ########################
-Player cards [T9, C6]
+Player cards: [T9, C6]
 Cards on table: [TA, H6, H4, CJ, C5]
 Game state: River
 Table: Gotha VI
 ########################
-Player cards [T2, C6]
+Player cards: [T2, C6]
 Cards on table: []
 Game state: Prefloop
 Table: Aida VI
 ########################
-Player cards []
+Player cards: []
 Cards on table: [HQ, P8, C2]
 Game state: Floop
 Table: Aitne VI
