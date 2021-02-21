@@ -1,19 +1,45 @@
-### This app reads data from PokerStars game.
-PokerStars windows don't have to be even visible.
+# This app reads data from PokerStars game.
+## It can work on any number of tables simultaneously
+
+PokerStars windows don't have to be even visible, but **cannot be minimalized**.
+
 
 At the moment this app recons:
 * Cards on table
+* Player cards
+* Game stage
 
-I will add some new features like game-stage recon and player's cards soon
+To make it work you need to set up orange table and default deck with 4 colors!
 
-To make it work you need to set up orange table and default four colors cards!
+Letter "X" and "?" signs means that card wasn't recognized properly.
 
+# Example output
+########################
+Player cards [T9, C6]
+Cards on table: [TA, H6, H4, CJ, C5]
+Game state: River
+Table: Gotha VI
+########################
+Player cards [T2, C6]
+Cards on table: []
+Game state: Prefloop
+Table: Aida VI
+########################
+Player cards []
+Cards on table: [HQ, P8, C2]
+Game state: Floop
+Table: Aitne VI
+########################
+
+## This is just a side project to learn some programming basics written in few hours, do not expect too much
+### anyway it is working pretty good
+
+[GitHub](http://github.com)
 
 ### It uses tesseract, opencv, pywin32, numpy and Pillow
-Get tesseract installer from https://github.com/UB-Mannheim/tesseract/wiki
-
+[Get tesseract installer](https://github.com/UB-Mannheim/tesseract/wiki)
 I was using tesseract-ocr-w64-setup-v5.0.0-alpha.20201127
 
-This page is linked in this readme https://github.com/tesseract-ocr/tesseract
+[Above url is listed on official tesseract readme](https://github.com/tesseract-ocr/tesseract)
 
-wrapper docs: https://pypi.org/project/pytesseract/
+[Tesseract wrapper docs](https://pypi.org/project/pytesseract/)

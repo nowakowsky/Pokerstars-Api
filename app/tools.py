@@ -14,6 +14,29 @@ except:
     from app import settings
     from app import models
 
+
+def readPlayerCards(filename: str) -> list:
+    cards = []
+
+    cards_diff = 37
+    card1 = [285, 296, 298, 312]
+    card2 = [285+cards_diff, 296+cards_diff, 298, 312]
+
+    image = cv2.imread(filename)
+    # image = cv2.imread("105255_095302.png")
+
+    card1 = image[card1[2]:card1[3], card1[0]:card1[1]]
+    card2 = image[card2[2]:card2[3], card2[0]:card2[1]]
+
+    # if card not on table yet
+    if emptyCard(card2):
+        pass
+    else:
+        cards.append(cardInfo(card1))
+        cards.append(cardInfo(card2))
+
+    return cards
+
 def readTableCards(filename: str) -> list:
     cards = []
 
@@ -44,7 +67,7 @@ def readTableCards(filename: str) -> list:
         else:
             card = image[cards_y1:cards_y2, table_cards[i]:table_cards[i+1]]
 
-        # if cart not on table yet
+        # if card not on table yet
         if emptyCard(card):
             pass
         else:
@@ -74,20 +97,16 @@ def __searchHwnds(name: str) -> list:
     win32gui.EnumWindows(foreach_window, None)
     return hwnds
 
-def removeScreenshots(screenshots: list):
-    for screenshot in screenshots:
-        os.remove(screenshot)
-
-def screenshot(windows: list) -> list:
+def grabScreen(windows: list) -> list:
     """
-    Takes screenshots and returns list of filenames created
+    Takes screenshots and returns list of models.Screenshot objects
 
     Credits to hazzey from stackoverflow 
-    I've just edited his function to search for windows by partial name and screenshot all of them
+    I've just edited his function to search for windows by partial name, screenshot all of them and grab table name
     
     https://stackoverflow.com/questions/19695214/python-screenshot-of-inactive-window-printwindow-win32gui
     """
-    files = []
+    screenshots = []
     for hwnd in windows:
         left, top, right, bot = win32gui.GetWindowRect(hwnd)
         w = right - left
@@ -119,8 +138,10 @@ def screenshot(windows: list) -> list:
         if result == 1:
             filename = datetime.now().strftime("%H%M%S_%f") + '.png'
             im.save(filename)
-            files.append(filename)
-    return files
+            tablename = win32gui.GetWindowText(hwnd).split("-")[0]
+            screenshot = models.Screenshot(tablename, filename)
+            screenshots.append(screenshot)
+    return screenshots
 
 
 

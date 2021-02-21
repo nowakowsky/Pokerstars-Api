@@ -2,13 +2,15 @@ import tools
 import os
 import models
 import cv2
-class PokerBot:
-    gameWindows = []
-    def __init__(self):
-        self.gameWindows = tools.moveAndResizeWindows()
-        self.tableCards = []
+import threading
 
-    def __checkGameState(self) -> str:
+class PokerBot:
+    gameState = ""
+    playerCards = []
+    tableCards = []
+    tableName = ""
+
+    def checkGameState(self) -> str:
         if not len(self.tableCards):
             return "Prefloop"
         elif len(self.tableCards) == 4:
@@ -19,27 +21,75 @@ class PokerBot:
             return "Floop"
 
     def readData(self):
-        screenshots = tools.screenshot(self.gameWindows)
-        for screenshot in screenshots:
-            self.tableCards = tools.readTableCards(screenshot)
-            print (*self.tableCards)
-            # for each in
-        # for screenshot in screenshots:
-        #     #read player cards
-        #     self.playerCards = None
-        #     #read table cards
-        #     self.tableCards = None
-        #     #read game state
-        #     self.gameState = __checkGameState()
+        self.tableCards = tools.readTableCards(screenshot.filename)
+        self.playerCards = tools.readPlayerCards(screenshot.filename)
+        self.gameState = self.checkGameState()
+        
 
-        #tools.removeScreenshots()
-
+class ChangesHandler:
+    tableName = ""
+    def __init__(self, bot: PokerBot):
+        self.gameState = bot.gameState
+        self.playerCards = bot.playerCards
+        self.tableCards = bot.tableCards
+        self.tableName = bot.tableName
     
+    def check(self, bot: PokerBot):
+        if self.gameState != bot.gameState or self.playerCards != bot.playerCards or self.tableCards != bot.tableCards:
+            self.gameState = bot.gameState
+            self.playerCards = bot.playerCards
+            self.tableCards = bot.tableCards
+            self.printData()
+
+        
+    def printData(self):
+        print (f'Player cards {self.playerCards}')
+        print (f'Cards on table: {self.tableCards}')
+        print (f'Game state: {self.gameState}')
+        print (f'Table: {self.tableName}')
+        print ("########################")
+
 import time
 
 if __name__ == "__main__":
+    handlers = []
+    bots = []
+    gameWindows = tools.moveAndResizeWindows()
     while 1:
-        bot = PokerBot()
-        bot.readData()
-        print ("###")
-        time.sleep(2)
+        screenshots = tools.grabScreen(gameWindows)
+        activeTables = [x.tableName for x in screenshots]
+        
+        # first run
+        if handlers == []:
+            for table in activeTables:
+                # init bot
+                bot = PokerBot()
+                bot.tableName = table
+                
+                # init handler
+                changesHandler = ChangesHandler(bot)
+                
+                # create lists
+                handlers.append(changesHandler)
+                bots.append(bot)
+
+        for screenshot in screenshots:
+            bot = next(filter(lambda b: b.tableName == screenshot.tableName, bots))
+            handler = next(filter(lambda h: h.tableName == screenshot.tableName, handlers))
+
+            bot.readData()
+            handler.check(bot)
+
+    # for screenshot in screenshots:
+    #     changesHandler = ChangesHandler(self)
+    #     self.tableCards = tools.readTableCards(screenshot.filename)
+    #     self.playerCards = tools.readPlayerCards(screenshot.filename)
+    #     self.gameState = self.checkGameState()
+    #     changesHandler.check(self)
+    #     del changesHandler
+
+
+    #     bot = PokerBot()
+    #     bot.readData()
+    #     print ("###")
+    #     time.sleep(2)
