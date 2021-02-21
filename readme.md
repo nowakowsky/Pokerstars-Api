@@ -32,6 +32,8 @@ Game state: Floop
 Table: Aitne VI
 ########################
 ```
+Each table has separate output and it's being send to stdout on change on this table. 
+
 ## This is just a side project to learn some programming basics written in few hours, do not expect too much. Anyway it is working pretty good
 ### This is not completed app, treat it as a beta version 
  
