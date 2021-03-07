@@ -57,7 +57,6 @@ class MultiBot:
 
         for img in screenshots:
             bot = PokerBot()
-            img.tableName
 
             changesHandler = ChangesHandler(bot, img.tableName)
             self.bot_dict[img.tableName] = [bot, changesHandler]
